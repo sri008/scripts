@@ -13,7 +13,6 @@ jenkinsStart () {
 }
 jenkinsStop () {
      # Stop the jenkins service and check if process was successful or not
-     echo"================================"
      sudo systemctl stop jenkins
      if [ "$?" -eq "0" ]
      then
@@ -27,25 +26,23 @@ jenkinsStatus () {
 }
 
 sonarStart () {
-     echo"================================"
-     sh /opt/sonarqube-7.6/bin/linux-x86-64/sonar.sh start
+     sh /opt/sonarqube-7.6/bin/linux-x86-64/sonar.sh start | grep "Started"
 }
 sonarStop () {
-     sh /opt/sonarqube-7.6/bin/linux-x86-64/sonar.sh stop
+     sh /opt/sonarqube-7.6/bin/linux-x86-64/sonar.sh stop | grep "Stopped"
 }
 sonarStatus () {
      sh /opt/sonarqube-7.6/bin/linux-x86-64/sonar.sh status
 }
 
 nexusStart () {
-     echo"================================"
-     sudo service nexus start
+     sudo service nexus start | grep "Started"
 }
 nexusStatus () {
-     sudo service nexus status
+     sudo service nexus status | grep "Nexus OSS"
 }
 nexusStop () {
-     sudo service nexus stop
+     sudo service nexus stop | grep "Stopped"
 }
 
 mysqlStart () {
@@ -71,24 +68,23 @@ mysqlStop() {
      fi
 
 }
-
 case "$JOB" in
      "start")
-     #jenkinsStart
-     #nexusStart
-     #sonarStart
+     jenkinsStart
+     nexusStart
+     sonarStart
      mysqlStart
      ;;
      "status")
-     #nexusStatus
-     #jenkinsStatus
-     #sonarStatus
+     nexusStatus
+     jenkinsStatus
+     sonarStatus
      mysqlStatus
      ;;
      "stop")
-     #nexusStop
-     #jenkinsStop
-     #sonarStop
+     nexusStop
+     jenkinsStop
+     sonarStop
      mysqlStop
      ;;
 esac
